@@ -2,65 +2,38 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-
-class User extends Authenticatable
+class Customization extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-protected $fillable = [
-        'nombre',
-        'apellido',
-        'status_id',
-        'role_id',
+       protected $fillable = [
+        'color_primario',
+        'color_secundario',
         'business_id'
+       
        ];
 
      protected $allowIncluded=[
-        'status',  
-        'appointments',
-        'business',
-        'roles',
-        'agendas',
-        'category'
-    ];
+        'business',  
+        'business.users.roles',
+        '',
+        '',
+        ''];
 
     protected $allowFilter=[
         'id',
-        'nombre',
-       'apellido'
-        ];
+        'color_primario',
+        'color_secundario'];
 
-             public function status()
-    {
-        return $this->belongsTo(Status::class);
-    }
-            public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
-    }
-            public function business()
-    {
-        return $this->belongsTo(Status::class);
-    }
-          public function roles()
-    {
-        return $this->belongsTo(Role::class);
-    }
-           public function agendas()
-    {
-        return $this->hasMany(Agenda::class);
-    }
-           public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
 
+      public function business()
+    {
+        return $this->belongsTo(Business::class);
+    }
 
       public function scopeIncluded(Builder $query): void
 {

@@ -2,63 +2,56 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 
-class User extends Authenticatable
+class Appointment extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-protected $fillable = [
-        'nombre',
-        'apellido',
+     protected $fillable = [
+        'nota',
+        'fecha',
+         'business_id',
+         'user_id',
         'status_id',
-        'role_id',
-        'business_id'
-       ];
+        'service_id'];
 
      protected $allowIncluded=[
-        'status',  
-        'appointments',
-        'business',
-        'roles',
-        'agendas',
-        'category'
-    ];
+        'business',  
+        'user',
+        'status',
+        'service'
+        ];
 
     protected $allowFilter=[
         'id',
-        'nombre',
-       'apellido'
-        ];
+        'nota',
+        'fecha'];
 
-             public function status()
+
+
+        
+    public function business()
+    {
+        return $this->belongsTo(Business::class);
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function status()
     {
         return $this->belongsTo(Status::class);
     }
-            public function appointments()
+    
+    public function service()
     {
-        return $this->hasMany(Appointment::class);
-    }
-            public function business()
-    {
-        return $this->belongsTo(Status::class);
-    }
-          public function roles()
-    {
-        return $this->belongsTo(Role::class);
-    }
-           public function agendas()
-    {
-        return $this->hasMany(Agenda::class);
-    }
-           public function category()
-    {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Service::class);
     }
 
 

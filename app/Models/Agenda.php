@@ -2,63 +2,42 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 
-class User extends Authenticatable
+class Agenda extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-protected $fillable = [
+     protected $fillable = [
         'nombre',
-        'apellido',
-        'status_id',
-        'role_id',
-        'business_id'
-       ];
+        'horarios',
+         'business_id',
+         'user_id'];
 
      protected $allowIncluded=[
-        'status',  
-        'appointments',
-        'business',
-        'roles',
-        'agendas',
-        'category'
-    ];
+        'business',  // relaciones que tiene se pone el nombre de la funcion 
+        'user'
+       ];
 
     protected $allowFilter=[
         'id',
         'nombre',
-       'apellido'
-        ];
+        'horarios'];
 
-             public function status()
+
+
+        
+    public function business()
     {
-        return $this->belongsTo(Status::class);
+        return $this->belongsTo(Business::class);
     }
-            public function appointments()
+    
+    public function user()
     {
-        return $this->hasMany(Appointment::class);
-    }
-            public function business()
-    {
-        return $this->belongsTo(Status::class);
-    }
-          public function roles()
-    {
-        return $this->belongsTo(Role::class);
-    }
-           public function agendas()
-    {
-        return $this->hasMany(Agenda::class);
-    }
-           public function category()
-    {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(User::class);
     }
 
 
@@ -128,4 +107,5 @@ public function scopeSort(Builder $query): void
 
         return $query->get();
     }
+    
 }

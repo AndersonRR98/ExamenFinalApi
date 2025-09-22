@@ -2,67 +2,72 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 
-class User extends Authenticatable
+class Status extends Model
 {
-    use HasFactory, Notifiable;
-
-protected $fillable = [
+    use HasFactory;
+         protected $fillable = [
         'nombre',
-        'apellido',
-        'status_id',
-        'role_id',
-        'business_id'
+        'descripcion'
+        
        ];
 
      protected $allowIncluded=[
-        'status',  
+        'plans',  
         'appointments',
+        'services',
+        'categories',
+        'users',
         'business',
         'roles',
-        'agendas',
-        'category'
+
     ];
 
     protected $allowFilter=[
         'id',
         'nombre',
-       'apellido'
+       'descripcion'
         ];
 
-             public function status()
+        public function plans()
     {
-        return $this->belongsTo(Status::class);
+        return $this->hasMany(Plan::class);
     }
-            public function appointments()
+
+    
+    public function appoinments()
     {
         return $this->hasMany(Appointment::class);
     }
-            public function business()
+
+      public function services()
     {
-        return $this->belongsTo(Status::class);
-    }
-          public function roles()
-    {
-        return $this->belongsTo(Role::class);
-    }
-           public function agendas()
-    {
-        return $this->hasMany(Agenda::class);
-    }
-           public function category()
-    {
-        return $this->belongsTo(Category::class);
+        return $this->hasMany(Service::class);
     }
 
+        public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 
-      public function scopeIncluded(Builder $query): void
+         public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+       public function business()
+    {
+        return $this->hasMany(Business::class);
+    }
+            public function roles()
+    {
+        return $this->hasMany(Role::class);
+    }
+  public function scopeIncluded(Builder $query): void
 {
     $included = request('included');
 
@@ -97,6 +102,7 @@ public function scopeFilter(Builder $query): void
         }
     }
 }
+ 
 
 public function scopeSort(Builder $query): void
 {

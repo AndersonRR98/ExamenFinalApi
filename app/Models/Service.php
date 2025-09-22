@@ -2,65 +2,56 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 
-class User extends Authenticatable
+class Service extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-protected $fillable = [
+    
+          protected $fillable = [
         'nombre',
-        'apellido',
+        'descripcion',
+        'category_id',
         'status_id',
-        'role_id',
         'business_id'
+       
        ];
 
      protected $allowIncluded=[
-        'status',  
-        'appointments',
+        'appointments',  
         'business',
-        'roles',
-        'agendas',
-        'category'
-    ];
+        'category',
+        'status',
+        'status.roles'];
 
     protected $allowFilter=[
         'id',
         'nombre',
-       'apellido'
+       'descripcion'
         ];
 
-             public function status()
-    {
-        return $this->belongsTo(Status::class);
-    }
-            public function appointments()
+
+      public function appointments()
     {
         return $this->hasMany(Appointment::class);
     }
-            public function business()
+       public function business()
     {
-        return $this->belongsTo(Status::class);
+        return $this->belongsTo(Business::class);
     }
-          public function roles()
-    {
-        return $this->belongsTo(Role::class);
-    }
-           public function agendas()
-    {
-        return $this->hasMany(Agenda::class);
-    }
-           public function category()
+
+      public function category()
     {
         return $this->belongsTo(Category::class);
     }
-
+      public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
 
       public function scopeIncluded(Builder $query): void
 {
@@ -97,7 +88,6 @@ public function scopeFilter(Builder $query): void
         }
     }
 }
-
 public function scopeSort(Builder $query): void
 {
     if (!request()->filled('sort') || empty($this->allowSort)) return;
@@ -128,4 +118,5 @@ public function scopeSort(Builder $query): void
 
         return $query->get();
     }
+
 }

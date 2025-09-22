@@ -2,63 +2,80 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 
-class User extends Authenticatable
+class Business extends Model
 {
-    use HasFactory, Notifiable;
-
-protected $fillable = [
-        'nombre',
-        'apellido',
+    /** @use HasFactory<\Database\Factories\BusinessFactory> */
+    use HasFactory;
+    
+     protected $fillable = [
+        'nota',
+        'direccion',
         'status_id',
-        'role_id',
-        'business_id'
+        'category_id',
+        'plan_id',
        ];
 
      protected $allowIncluded=[
-        'status',  
-        'appointments',
-        'business',
-        'roles',
-        'agendas',
-        'category'
-    ];
+        'appointment',  
+        'category',
+        'status',
+        'plans',
+        'service',
+       'customization',
+        'users',
+'       agenda'];
 
     protected $allowFilter=[
         'id',
-        'nombre',
-       'apellido'
-        ];
+        'nota',
+        'fecha'];
 
-             public function status()
-    {
-        return $this->belongsTo(Status::class);
-    }
-            public function appointments()
+
+
+        
+    public function appointments()
     {
         return $this->hasMany(Appointment::class);
     }
-            public function business()
+    
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function status()
     {
         return $this->belongsTo(Status::class);
     }
-          public function roles()
+
+      public function plans()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Plan::class);
     }
-           public function agendas()
+    
+    public function service()
+    {
+        return $this->hasMany(Service::class);
+    }
+
+     public function customization()
+    {
+        return $this->hasMany(Customization::class);
+    }
+
+      public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+     public function agenda()
     {
         return $this->hasMany(Agenda::class);
-    }
-           public function category()
-    {
-        return $this->belongsTo(Category::class);
     }
 
 
